@@ -14,11 +14,6 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
-    bag = request.session.get('bag', {})
-    if not bag:
-        messages.error(request, "There's nothing in your bag at the moment")
-        return redirect(reverse('products'))
-
     if request.method == 'POST':
         bag = request.session.get('bag', {})
 
@@ -92,8 +87,8 @@ def checkout(request):
     template = 'checkout/checkout.html'
     context = {
         'order_form': order_form,
-        'stripe_public_key': 'pk_test_51NldnhDfOIELGWG3fZDZWN6lwsF89jr1ZHPmsdYggu7a8AECIiJRl6vRWJUthcvjEGdWHG1qXhNZM1blCyCPGvC100lq5XeMT3',
-        'client_secret': 'test client secret',
+        'stripe_public_key': stripe_public_key,
+        'client_secret': intent.client_secret,
     }
 
     return render(request, template, context)
